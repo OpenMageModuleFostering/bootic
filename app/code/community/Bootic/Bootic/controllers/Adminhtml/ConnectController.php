@@ -77,7 +77,7 @@ class Bootic_Bootic_Adminhtml_ConnectController extends Bootic_Bootic_Adminhtml_
             $profile = Mage::getSingleton('bootic/profile')->addData($data);
 
             $validate = $profile->validate();
-            if ($validate === true) {
+            if ($validate === true && empty($_FILES['picture']['error'])) {
                 try {
                     $dataArray = $profile->toArray();
                     unset($dataArray['picture']);
@@ -130,7 +130,19 @@ class Bootic_Bootic_Adminhtml_ConnectController extends Bootic_Bootic_Adminhtml_
                 }
             }
             else {
-                $session->setFormData($data);
+                // We add this in case image size exceeds file limit
+                if (!empty($_FILES['picture']['error'])) {
+                    switch ($_FILES['picture']['error']) {
+                        case 1:
+                            $session->addError(sprintf('Image size exceeds the %s PHP limit. Check your upload_max_filesize directive in php.ini.', ini_get('upload_max_filesize')));
+                            break;
+                        default:
+                            $session->addError('Image could not be uploaded. Please try again or use a different image.');
+                    }
+                } else {
+                    $session->setFormData($data);
+                }
+
                 if (is_array($validate)) {
                     foreach ($validate as $errorMessage) {
                         $session->addError($errorMessage);
