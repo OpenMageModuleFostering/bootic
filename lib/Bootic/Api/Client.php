@@ -6,8 +6,7 @@
 class Bootic_Api_Client
 {
     /** @var string */
-    protected $_defaultUri = 'http://jfuchs.tech.bootic.com/cgi-bin/api';
-//    protected $_defaultUri = 'https://secure.bootic.com/cgi-bin/api';
+    protected $_defaultUri = 'https://secure.bootic.com/cgi-bin/api';
 
 	/** @var array|Zend_Uri_Http[] */
     protected $_uris = array();
