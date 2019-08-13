@@ -1,0 +1,38 @@
+<?php
+/**
+ * @copyright  Copyright (c) 2012 by  Bootic.
+ */
+?>
+
+<?php $_errors = $this->getErrors(); ?>
+
+<?php if(count($_errors) > 0): ?>
+<div class="grid">
+    <table class="data" cellspacing="0" width="100%" >
+        <thead>
+            <tr class="headings">
+                <th class="a-center"><?php echo $this->__('Id') ?></th>
+                <th class="a-center"><?php echo $this->__('Product Id') ?></th>
+                <th class="a-center"><?php echo $this->__('Date') ?></th>
+                <th class="a-center"><?php echo $this->__('Error') ?></th>
+                <th class="a-center"><?php echo $this->__('Message') ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $i = 0 ?>
+            <?php foreach ($_errors as $error): ?>
+            <?php $color = ($error->getStatus() == 'error') ? 'red' : 'orange'; ?>
+            <?php $class = ($i % 2 == 0) ? 'event pointer' : 'pointer'; ?>
+                <tr class="<?php echo $class; ?>">
+                    <td class="a-center"><?php echo $error->getId(); ?></td>
+                    <td class="a-center"><?php echo $error->getProductId(); ?></td>
+                    <td class="a-center"><?php echo $error->getDate(); ?></td>
+                    <td><?php echo $error->getStatus(); ?></td>
+                    <td style="color:<?php echo $color ?>;"><?php echo $error->getMessage(); ?></td>
+                </tr>
+            <?php $i++ ?>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+</div>
+<?php endif; ?>

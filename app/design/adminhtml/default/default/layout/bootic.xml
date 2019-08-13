@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright  Copyright (c) 2012 by  Bootic.
+ */
+-->
+
+<layout>
+
+	<bootic_adminhtml_connect_index>
+        <update handle="editor"/>
+        <reference name="content">
+			<block type="bootic/adminhtml_connect_profile" name="bootic_connect" />
+		</reference>
+	</bootic_adminhtml_connect_index>
+
+    <bootic_adminhtml_storefront_index>
+        <block type="bootic/adminhtml_storefront_banner" name="bootic_storefront_banner" template="bootic/storefront/banners.phtml" />
+        <block type="bootic/adminhtml_storefront_preview" name="bootic_storefront_preview" template="bootic/storefront/preview.phtml" />
+        <reference name="content">
+			<block type="bootic/adminhtml_storefront_edit" name="bootic_storefront_edit" />
+		</reference>
+        <reference name="left">
+			<block type="bootic/adminhtml_storefront_edit_tabs" name="bootic_storefront_edit_tabs"/>
+		</reference>
+        <reference name="head">
+            <action method="addItem">
+                <type>js</type>
+                <name>bootic/prototype-color-picker/js/prototype_colorpicker.js</name>
+            </action>
+            <action method="addItem">
+                <type>js_css</type>
+                <name>bootic/prototype-color-picker/css/prototype_colorpicker.css</name>
+            </action>
+        </reference>
+	</bootic_adminhtml_storefront_index>
+
+    <bootic_adminhtml_storefront_new>
+		<reference name="content">
+			<block type="bootic/adminhtml_storefront_create" name="bootic_storefront_create"/>
+		</reference>
+	</bootic_adminhtml_storefront_new>
+
+    <bootic_adminhtml_catalog_index>
+        <reference name="messages">
+            <action method="addNotice" translate="message">
+                <message>Bootic only supports simple and configurable products. Products that are chidlren of configurable products cannot be uploaded individually.</message>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="bootic/adminhtml_catalog" name="bootic_catalog" template="bootic/bootic.phtml">
+                <block type="bootic/adminhtml_catalog_tabs" name="bootic_adminhtml_catalog_tabs"/>
+            </block>
+        </reference>
+    </bootic_adminhtml_catalog_index>
+
+    <bootic_adminhtml_catalog_category_index>
+        <reference name="content">
+            <block type="bootic/adminhtml_catalog_category" name="bootic_catalog_category" />
+        </reference>
+    </bootic_adminhtml_catalog_category_index>
+
+    <bootic_adminhtml_system_config_account_index>
+        <reference name="content">
+            <block type="bootic/adminhtml_system_config_account_create" name="bootic_account_create" />
+        </reference>
+    </bootic_adminhtml_system_config_account_index>
+
+</layout>

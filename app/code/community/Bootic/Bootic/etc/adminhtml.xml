@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <bootic translate="title" module="bootic">
+            <title>Bootic</title>
+            <sort_order>71</sort_order>
+            <children>
+                <connect module="bootic">
+                    <title>Profile</title>
+                    <sort_order>0</sort_order>
+                    <action>bootic/adminhtml_connect</action>
+                </connect>
+                <storefront module="bootic">
+                    <title>Storefront</title>
+                    <sort_order>1</sort_order>
+                    <action>bootic/adminhtml_storefront</action>
+                </storefront>
+                <catalog module="bootic">
+                    <title>Catalog</title>
+                    <sort_order>2</sort_order>
+                    <children>
+                        <upload_products translate="title" module="bootic">
+                            <title>Manage Products</title>
+                            <action>bootic/adminhtml_catalog</action>
+                        </upload_products>
+                        <category translate="title" module="bootic">
+                            <title>Category Mapping</title>
+                            <action>bootic/adminhtml_catalog_category</action>
+                        </category>
+                    </children>
+                </catalog>
+            </children>
+        </bootic>
+    </menu>
+
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <bootic translate="title" module="bootic">
+                        <title>Bootic</title>
+                        <children>
+                            <connect translate="title" module="bootic">
+                                <title>Connect</title>
+                            </connect>
+                            <storefront translate="title" module="bootic">
+                                <title>Storefront</title>
+                            </storefront>
+                            <catalog translate="title" module="bootic">
+                                <title>Catalog</title>
+                            </catalog>
+                            <statistics translate="title" module="bootic">
+                                <title>Statistics</title>
+                            </statistics>
+                        </children>
+                    </bootic>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <bootic module="bootic">
+                                        <title>Bootic</title>
+                                    </bootic>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

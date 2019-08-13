@@ -1,0 +1,277 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * @category    Bootic
+ * @package     Bootic_Bootic
+ * @copyright   Copyright (c) 2012 Bootic (http://www.bootic.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Bootic_Bootic>
+            <version>1.0.0</version>
+        </Bootic_Bootic>
+    </modules>
+    <global>
+        <helpers>
+            <bootic>
+                <class>Bootic_Bootic_Helper</class>
+            </bootic>
+        </helpers>
+        <blocks>
+            <bootic>
+                <class>Bootic_Bootic_Block</class>
+            </bootic>
+        </blocks>
+        <models>
+            <bootic>
+                <class>Bootic_Bootic_Model</class>
+                <resourceModel>bootic_resource</resourceModel>
+            </bootic>
+            <bootic_resource>
+                <class>Bootic_Bootic_Model_Mysql4</class>
+                <entities>
+                    <log>
+                        <table>bootic_log</table>
+                    </log>
+                    <product_data>
+                        <table>bootic_product_data</table>
+                    </product_data>
+                    <category>
+                        <table>bootic_category</table>
+                    </category>
+                    <category_parent>
+                        <table>bootic_category_parent</table>
+                    </category_parent>
+                    <category_mapping>
+                        <table>bootic_category_mapping</table>
+                    </category_mapping>
+                    <message>
+                        <table>bootic_message</table>
+                    </message>
+                    <order_data>
+                        <table>bootic_order_data</table>
+                    </order_data>
+                </entities>
+            </bootic_resource>
+        </models>
+        <resources>
+            <bootic_setup>
+                <setup>
+                    <module>Bootic_Bootic</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </bootic_setup>
+            <bootic_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </bootic_write>
+            <bootic_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </bootic_read>
+        </resources>
+        <events>
+            <controller_action_postdispatch_adminhtml_system_config_save>
+                <observers>
+                    <bootic_config_changed>
+                        <type>singleton</type>
+                        <class>Bootic_Bootic_Model_System_Config_Observer</class>
+                        <method>redirectToCategoryMapping</method>
+                    </bootic_config_changed>
+                </observers>
+            </controller_action_postdispatch_adminhtml_system_config_save>
+            <catalog_product_save_before>
+                <observers>
+                    <bootic_product_edit>
+                        <type>singleton</type>
+                        <class>Bootic_Bootic_Model_Product_Observer</class>
+                        <method>updateBooticProductInfo</method>
+                    </bootic_product_edit>
+                </observers>
+            </catalog_product_save_before>
+            <cataloginventory_stock_item_save_after>
+                <observers>
+                    <bootic_product_stock_edit>
+                        <type>singleton</type>
+                        <class>Bootic_Bootic_Model_Stock_Observer</class>
+                        <method>updateBooticStock</method>
+                    </bootic_product_stock_edit>
+                </observers>
+            </cataloginventory_stock_item_save_after>
+            <sales_order_save_after>
+                <observers>
+                    <bootic_product_sold>
+                        <type>singleton</type>
+                        <class>Bootic_Bootic_Model_Stock_Observer</class>
+                        <method>updateSoldProductBooticStock</method>
+                    </bootic_product_sold>
+                </observers>
+            </sales_order_save_after>
+            <admin_session_user_login_success>
+                <observers>
+                    <bootic_admin_login>
+                        <type>singleton</type>
+                        <class>Bootic_Bootic_Model_Session_Observer</class>
+                        <method>pullUnreadMessages</method>
+                    </bootic_admin_login>
+                </observers>
+            </admin_session_user_login_success>
+            <controller_action_postdispatch_adminhtml_notification_markAsRead>
+                <observers>
+                    <bootic_message_read>
+                        <type>singleton</type>
+                        <class>Bootic_Bootic_Model_Message_Observer</class>
+                        <method>markMessageAsRead</method>
+                    </bootic_message_read>
+                </observers>
+            </controller_action_postdispatch_adminhtml_notification_markAsRead>
+            <order_cancel_after>
+                <observers>
+                    <bootic_order_cancel>
+                        <type>singleton</type>
+                        <class>Bootic_Bootic_Model_Order_Observer</class>
+                        <method>orderCanceled</method>
+                    </bootic_order_cancel>
+                </observers>
+            </order_cancel_after>
+            <sales_order_shipment_save_after>
+                <observers>
+                    <bootic_order_shipped>
+                        <type>singleton</type>
+                        <class>Bootic_Bootic_Model_Order_Observer</class>
+                        <method>orderShipped</method>
+                    </bootic_order_shipped>
+                </observers>
+            </sales_order_shipment_save_after>
+        </events>
+    </global>
+    <frontend>
+        <routers>
+            <bootic>
+                <use>standard</use>
+                <args>
+                    <module>Bootic_Bootic</module>
+                    <frontName>bootic</frontName>
+                </args>
+            </bootic>
+        </routers>
+    </frontend>
+    <admin>
+        <routers>
+            <bootic>
+                <use>admin</use>
+                <args>
+                    <module>Bootic_Bootic</module>
+                    <frontName>bootic</frontName>
+                </args>
+            </bootic>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <bootic>
+                    <file>bootic.xml</file>
+                </bootic>
+            </updates>
+        </layout>
+    </adminhtml>
+    <crontab>
+        <jobs>
+            <bootic_bootic_upload_products>
+                <schedule>
+                    <cron_expr>0 */1 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>bootic/cron::uploadProducts</model>
+                </run>
+            </bootic_bootic_upload_products>
+            <bootic_bootic_edit_products>
+                <schedule>
+                    <cron_expr>0 */2 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>bootic/cron::editProducts</model>
+                </run>
+            </bootic_bootic_edit_products>
+            <bootic_bootic_check_products_status>
+                <schedule>
+                    <cron_expr>0 */2 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>bootic/cron::checkProductsStatus</model>
+                </run>
+            </bootic_bootic_check_products_status>
+            <bootic_bootic_sync_products_stocks>
+                <schedule>
+                    <cron_expr>0 */1 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>bootic/cron::syncProductsStocks</model>
+                </run>
+            </bootic_bootic_sync_products_stocks>
+            <bootic_bootic_fetch_orders>
+                <schedule>
+                    <cron_expr>0 */1 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>bootic/cron::fetchOrders</model>
+                </run>
+            </bootic_bootic_fetch_orders>
+            <bootic_bootic_sync_orders>
+                <schedule>
+                    <cron_expr>*/20 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>bootic/cron::syncOrders</model>
+                </run>
+            </bootic_bootic_sync_orders>
+        </jobs>
+    </crontab>
+    <default>
+        <bootic>
+            <sales>
+                <monthly_sales_req_for_bonus>0</monthly_sales_req_for_bonus>
+                <bonus_amount>0</bonus_amount>
+                <commission>10</commission>
+            </sales>
+            <product>
+                <limit>50</limit>
+            </product>
+        </bootic>
+        <carriers>
+            <bootic>
+                <active>1</active>
+                <model>bootic/shipping_flatrate</model>
+                <title>Bootic Shipping</title>
+                <name>Default Rate</name>
+            </bootic>
+        </carriers>
+        <payment>
+            <bootic_payment_method>
+                <active>0</active>
+                <model>bootic/payment</model>
+                <allowspecific>0</allowspecific>
+                <title>Bootic Payment</title>
+            </bootic_payment_method>
+        </payment>
+    </default>
+</config>

@@ -1,0 +1,62 @@
+<?php
+    $opts = $this->getOptions();
+?>
+
+<style type="text/css">
+    .banners-container{margin-bottom: 20px;}
+    .banner-holder{float: left;margin: 0 10px 10px 0;cursor: pointer;padding: 5px;width: 240px;height: 43px;}
+    .banner-holder:hover, .banner-holder.selected{border:2px solid green;padding: 3px;}
+</style>
+
+<script type="text/javascript">
+    document.observe("dom:loaded", function() {
+        var storeOptions = <?php echo json_encode($opts) ?>;
+        console.log(storeOptions);
+
+        var templates = storeOptions.templates;
+        var color = "#" + $('storefront_color_theme').value;
+        var bannerSrc = $$('.banners-container .selected img')[0].src;
+
+        var template = new Element('img');
+        template.setStyle({ position: 'absolute' });
+
+        var banner = new Element('img');
+        banner.src = bannerSrc;
+        banner.setStyle({ position: 'absolute', width: '500px', top: '55px'});
+        banner.setAttribute('id', 'bannerPreview');
+
+        var previewDiv = new Element('div');
+        previewDiv
+            .addClassName('previewDiv')
+            .setStyle({ backgroundColor: color, width: '500px', height: '600px', margin: '0 auto', position: 'relative' })
+            .insert({
+                top: template,
+                bottom: banner
+            })
+        ;
+        previewDiv.setAttribute('id', 'previewDiv');
+
+        templates.each(function (tmpl) {
+            if (tmpl.current_template == true) {
+                template.src = tmpl.preview;
+                $("storefront_preview_fieldset").insert({
+                    top: previewDiv
+                });
+            }
+        });
+
+        // Now we track change event on template
+        // for color see Bootic_Bootic_Block_Adminhtml_Storefront_Edit
+        // for banner see banners.phtml
+        $('storefront_template').observe('change', function(event) {
+            var templateName = event.target.value;
+
+            templates.each(function (tmpl) {
+                if (tmpl.name == templateName) {
+                    template.src = tmpl.preview;
+                }
+            });
+        });
+
+    });
+</script>

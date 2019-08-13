@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/Bootic",
+    "type": "magento-module",
+    "license": "Berkeley-Software-Distribution-License-(BSDL)",
+    "homepage": "",
+    "description": "Synchronize Magento with Bootic: products, stock levels, sales and shipments",
+    "authors": [
+    {
+        "name": "Stephane Tougard",
+        "email": "magento@bootic.com"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}

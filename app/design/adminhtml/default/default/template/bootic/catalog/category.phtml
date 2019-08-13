@@ -1,0 +1,176 @@
+<?php
+/**
+ * @copyright  Copyright (c) 2012 by  Bootic.
+ */
+?>
+
+<?php $mapping = $this->getCategoryMapping(); ?>
+
+<div class="content-header">
+    <?php echo $this->getHeaderHtml() ?>
+    <p class="form-buttons"><?php echo $this->getButtonsHtml('header') ?></p>
+</div>
+<form id="category_form" name="category_form" action="<?php echo Mage::helper('adminhtml')->getUrl('bootic/adminhtml_catalog_category/save'); ?>" method="POST">
+    <input id="form_key" name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
+    <div class="grid">
+        <table class="data" cellspacing="0" width="100%">
+            <thead>
+                <tr class="headings">
+                    <th class="a-left"><?php echo $this->__('Magento Category') ?></th>
+                    <th class="a-left" width="70%"><?php echo $this->__('Bootic Category') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <?php $jsonBooticCategories = $this->getJsonFormattedBooticCategories(); ?>
+
+                <?php foreach($this->getMagentoCategories() as $category): ?>
+                    <tr>
+                        <td><?php echo $category['value'] ?></td>
+                        <td align="center" class="bootic-category-container" style="position: relative;">
+                            <input type="hidden" name="category[<?php echo $category['id'] ?>]" id="category-<?php echo $category['id'] ?>" class="bootic-category" value="<?php echo ($mapping[$category['id']]) ? $mapping[$category['id']] : '' ?>">
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+
+                <script type="text/javascript">
+                    var booticCategories    = '<?php print $jsonBooticCategories ?>'.evalJSON();
+                    var elmts               = $$('.bootic-category-container');
+
+                    elmts.each(function (elmt) {
+                        var catId = parseInt(elmt.down('input[type=hidden]').value),
+                            firstSel = new Element('select'),
+                            defaultOpt = new Element('option')
+                            ;
+
+                        defaultOpt.value    = null;
+                        defaultOpt.text     = '-- Select a category --';
+
+                        firstSel
+                            .addClassName('first')
+                            .setStyle({
+                                float: 'left'
+                            })
+                        ;
+
+                        firstSel.options.add(defaultOpt);
+
+                        var secSel = new Element('select'),
+                            secDefaultOpt = new Element('option');
+
+                        secSel.addClassName('second');
+                        secSel.options.add(secDefaultOpt);
+                        secSel['disable']();
+
+                        secDefaultOpt.value    = null;
+                        secDefaultOpt.text     = '-- Select an optional sub-category --';
+
+                        for (i in booticCategories) {
+
+                            var opt     = new Element('option');
+                            opt.value   = booticCategories[i].id;
+                            opt.text    = booticCategories[i].label;
+
+                            var childrenCategories = booticCategories[i].children;
+
+                            if (opt.value == catId || hasChildSelected(catId, childrenCategories)) {
+                                opt.selected = true;
+
+                                if (typeof (childrenCategories) != 'undefined') {
+                                    childrenCategories.each(function(cC) {
+                                        var secOpt      = new Element('option');
+                                        secOpt.value    = cC['id'];
+                                        secOpt.text     = cC['label'];
+
+                                        if (secOpt.value == catId) {
+                                            secOpt.selected = true;
+                                        }
+
+                                        secSel.options.add(secOpt);
+                                    });
+
+                                    secSel['enable']();
+                                }
+                            }
+
+                            firstSel.options.add(opt);
+                        }
+
+                        elmt.insert(firstSel);
+                        elmt.insert(secSel);
+                    });
+
+                    elmts.invoke('observe', 'change', function(e) {
+                        var t = e.target;
+
+                        if (t.hasClassName('first')) {
+                            updateChildren(e);
+
+                        } else {
+                            var elmt = t.up('td');
+
+                            if (t.value != 'null') {
+                                elmt.down('input[type=hidden]').value = t.value;
+                            } else {
+                                elmt.down('input[type=hidden]').value = elmt.down('.first').value;
+                            }
+                        }
+                    });
+
+                    function hasChildSelected(catId, categories)
+                    {
+                        if (typeof (categories) != 'undefined') {
+                            for (i in categories) {
+                                if (catId == categories[i].id) {
+                                    return true;
+                                }
+                            }
+                        }
+
+                        return false;
+                    }
+
+                    function updateChildren(e)
+                    {
+                        var target              = e.target,
+                            elmt                = target.up('td'),
+                            id                  = target.value,
+                            secSel              = new Element('select'),
+                            defaultOpt          = new Element('option');
+
+                        var selectedCategory    = id ? booticCategories[id] : null;
+
+                        elmt.down('input[type=hidden]').value = id;
+                        Element.remove(target.next('select'));
+
+                        defaultOpt.value    = null;
+                        defaultOpt.text     = '-- Select an optional sub-category --';
+
+                        secSel.addClassName('second');
+                        secSel.options.add(defaultOpt);
+                        secSel['disable']();
+
+                        if (selectedCategory != null && typeof (selectedCategory.children) != 'undefined') {
+                            var childrenCategories = selectedCategory.children;
+
+                            childrenCategories.each(function(cC) {
+                                var secOpt      = new Element('option');
+                                secOpt.value    = cC['id'];
+                                secOpt.text     = cC['label'];
+                                secSel.options.add(secOpt);
+                            });
+
+                            secSel['enable']();
+                        }
+
+                        elmt.insert(secSel);
+                    }
+
+                </script>
+            </tbody>
+        </table>
+    </div>
+</form>
+<script type="text/javascript">
+    editForm = new varienForm('category_form');
+</script>

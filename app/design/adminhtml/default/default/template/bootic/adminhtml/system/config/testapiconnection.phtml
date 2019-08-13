@@ -1,0 +1,59 @@
+<?php
+/**
+ * @copyright  Copyright (c) 2012 by  Bootic.
+ */
+?>
+
+<?php if($this->getDisplayCreateAccount() == true): ?>
+    <script type="text/javascript">
+        //<![CDATA[
+            var accountCreateButtonHeading = '<tr class="system-fieldset-sub-head" id="row_bootic_account_heading_creation"><td colspan="5"><h4 id="bootic_account_heading_creation"> Create an account on Bootic</h4></td></tr>';
+            var accountCreateButtonField = '<tr id="row_bootic_account_create"><td class="label"><label for="bootic_account_create"> Create a new account</label></td><td class="value">';
+            accountCreateButtonField += '<button onclick="javascript:goToCreateAccountPage(); return false;" class="scalable add" type="button" id="bootic_account_create"><span>Create account</span></button></td><td class="scope-label"></td><td class=""></td></tr>';
+
+            $('bootic_account').down('tbody').insert({top: accountCreateButtonField});
+            $('bootic_account').down('tbody').insert({top: accountCreateButtonHeading});
+
+            $('bootic_account_heading_credentials').update('<?php echo $this->__('Or provide your Bootic credentials if you already have an account'); ?>');
+
+            function goToCreateAccountPage() {
+                window.location = '<?php echo $this->getRedirectUrl(); ?>';
+            }
+        //]]>
+    </script>
+<?php endif; ?>
+
+<script type="text/javascript">
+//<![CDATA[
+    function testApiConnection() {
+        var elem = $('<?php echo $this->getHtmlId() ?>');
+
+        params = {
+            email: $('bootic_account_email').value,
+            password: $('bootic_account_password').value
+        };
+
+        new Ajax.Request('<?php echo $this->getAjaxUrl() ?>', {
+            parameters: params,
+            onSuccess: function(response) {
+                result = '<?php echo $this->__('Cannot connect to Bootic API') ?>';
+                try {
+                    response = response.responseText;
+                    if (response == 1) {
+                        result = '<?php echo $this->__('Successfully connected to Bootic API') ?>';
+                        elem.removeClassName('fail').addClassName('success')
+                    } else {
+                        elem.removeClassName('success').addClassName('fail')
+                    }
+                } catch (e) {
+                    elem.removeClassName('success').addClassName('fail')
+                }
+                $('validation_result').update(result);
+            }
+        });
+    }
+//]]>
+</script>
+<button onclick="javascript:testApiConnection(); return false;" class="scalable" type="button" id="<?php echo $this->getHtmlId() ?>">
+    <span id="validation_result"><?php echo $this->escapeHtml($this->getButtonLabel()) ?></span>
+</button>

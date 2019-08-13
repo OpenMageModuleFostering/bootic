@@ -1,0 +1,41 @@
+<?php
+$banners = Mage::getSingleton('bootic/storefront')->getBanners();
+$selectedBannerId = Mage::getSingleton('bootic/storefront')->getBanner();
+
+$booticClient = Mage::helper('bootic')->getBootic();
+?>
+
+<div class="banners-container">
+    <?php foreach($banners as $b): ?>
+        <div class="banner-holder <?php if($b['id'] == $selectedBannerId) echo ' selected' ?>" id="<?php echo $b['id'] ?>">
+            <img src="<?php echo $b['picture'] ?>" class="banner" width="240" />
+        </div>
+    <?php endforeach; ?>
+    <div style="clear: both;"></div>
+</div>
+
+<style type="text/css">
+    .banners-container{margin-bottom: 20px;}
+    .banner-holder{float: left;margin: 0 10px 10px 0;cursor: pointer;padding: 5px;width: 240px;height: 43px;}
+    .banner-holder:hover, .banner-holder.selected{border:2px solid green;padding: 3px;}
+</style>
+
+<script type="text/javascript">
+    var elmts = $$('.banner-holder');
+    elmts.invoke('observe', 'click', function(e) {
+        var selected = $$('.banner-holder.selected');
+        if (selected.length) {
+            selected.invoke('removeClassName','selected');
+        }
+        this.addClassName('selected');
+        $('storefront_banner').value = this.identify();
+
+        updatePreviewBanner(this);
+    });
+
+    function updatePreviewBanner(banner) {
+        var img = banner.down();
+        $('bannerPreview').src = img.src;
+    }
+
+</script>

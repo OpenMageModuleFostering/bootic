@@ -1,0 +1,305 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <bootic translate="label" module="bootic">
+            <label>Bootic</label>
+            <tab>sales</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>600</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+            <groups>
+                <account translate="button_label" module="bootic">
+                    <label>Account</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>0</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <expanded>true</expanded>
+                    <fields>
+                        <heading_credentials translate="label" module="bootic">
+                            <label>Your Bootic account credentials</label>
+                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </heading_credentials>
+                        <email translate="label" module="bootic">
+                            <label>Email</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </email>
+                        <password translate="label" module="bootic">
+                            <label>Password</label>
+                            <frontend_type>password</frontend_type>
+                            <backend_model>bootic/system_config_connection</backend_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </password>
+                        <connection_test translate="button_label">
+                            <label></label>
+                            <button_label>Test Bootic API connection</button_label>
+                            <frontend_model>bootic/adminhtml_system_config_testapiconnection</frontend_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </connection_test>
+                    </fields>
+                </account>
+                <system translate="label" module="bootic">
+                    <label>System</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <!-- ORDERS -->
+                        <!--<heading_orders translate="label">-->
+                            <!--<label>Orders import (from Bootic)</label>-->
+                            <!--<frontend_model>adminhtml/system_config_form_field_heading</frontend_model>-->
+                            <!--<sort_order>105</sort_order>-->
+                            <!--<show_in_default>1</show_in_default>-->
+                            <!--<show_in_website>1</show_in_website>-->
+                        <!--</heading_orders>-->
+                        <store_id translate="label">
+                            <label>Store</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>bootic/system_config_source_store</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </store_id>
+                        <!--<run_cron_orders translate="label button_label comment">-->
+                            <!--<label>Orders processing job</label>-->
+                            <!--<frontend_model>bootic/adminhtml_system_config_button_cron</frontend_model>-->
+                            <!--<cron_type>orders</cron_type>-->
+                            <!--<button_label>Run</button_label>-->
+                            <!--<button_url>bootic/adminhtml_system_cron/runProcessOrders</button_url>-->
+                            <!--<sort_order>110</sort_order>-->
+                            <!--<show_in_default>1</show_in_default>-->
+                            <!--<show_in_website>1</show_in_website>-->
+                            <!--<show_in_store>1</show_in_store>-->
+                            <!--<comment>Run cron manually</comment>-->
+                        <!--</run_cron_orders>-->
+                    </fields>
+                </system>
+                <product translate="label" module="bootic">
+                    <label>Product</label>
+                    <comment>&lt;strong&gt;Note:&lt;/strong&gt; in case no match can be found leave these values empty or create new attributes specifically for Bootic.</comment>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <heading_upload translate="label">
+                            <label>Upload</label>
+                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </heading_upload>
+                        <limit translate="label">
+                            <label>Limit of products per cron run</label>
+                            <comment>&lt;strong&gt;Note:&lt;/strong&gt; default is 50 - reduce this limit if you experience temporary slowdowns on your site.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </limit>
+                        <heading_general translate="label">
+                            <label>General</label>
+                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </heading_general>
+                        <brand_name translate="label">
+                            <label>Brand Name</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>bootic/system_config_source_attribute</source_model>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </brand_name>
+                        <warranty_months translate="label">
+                            <label>Warranty in Months</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>bootic/system_config_source_attribute</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </warranty_months>
+                        <isbn translate="label">
+                            <label>ISBN</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>bootic/system_config_source_attribute</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </isbn>
+                        <ean translate="label">
+                            <label>EAN13</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>bootic/system_config_source_attribute</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </ean>
+                        <upc translate="label">
+                            <label>UPC</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>bootic/system_config_source_attribute</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </upc>
+                        <pkg_width translate="label">
+                            <label>Package Width in inches</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>bootic/system_config_source_attribute</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </pkg_width>
+                        <pkg_height translate="label">
+                            <label>Package Height in inches</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>bootic/system_config_source_attribute</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </pkg_height>
+                        <pkg_length translate="label">
+                            <label>Package Length in inches</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>bootic/system_config_source_attribute</source_model>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </pkg_length>
+                        <pkg_weight translate="label">
+                            <label>Package Weight in pounds</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>bootic/system_config_source_attribute</source_model>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </pkg_weight>
+                        <heading_categories translate="label">
+                            <label>Categories</label>
+                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </heading_categories>
+                        <root_category translate="label">
+                            <label>Root category</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_category</source_model>
+                            <sort_order>110</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </root_category>
+                        <heading_image translate="label">
+                            <label>Image</label>
+                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </heading_image>
+                        <image translate="label">
+                            <label>Main Image</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>bootic/system_config_source_image</source_model>
+                            <sort_order>210</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </image>
+                    </fields>
+                </product>
+                <sales translate="label" module="bootic">
+                    <label>Sales</label>
+                    <comment>&lt;strong&gt;Note:&lt;/strong&gt; Define default sales options values.</comment>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <monthly_sales_req_for_bonus translate="label">
+                            <label>Monthly Sales Required for Bonus</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </monthly_sales_req_for_bonus>
+                        <bonus_amount translate="label">
+                            <label>Bonus Amount</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </bonus_amount>
+                        <commission translate="label">
+                            <label>Commission for other vendors on your products</label>
+                            <backend_model>bootic/system_config_commission</backend_model>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </commission>
+                    </fields>
+                </sales>
+                <delivery translate="label" module="bootic">
+                    <label>Delivery options</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <delivery_time_days translate="label">
+                            <label>How many days (average) will normal shipping take?</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </delivery_time_days>
+                    </fields>
+                </delivery>
+            </groups>
+        </bootic>
+    </sections>
+</config>

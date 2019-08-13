@@ -1,0 +1,17 @@
+<?php
+/**
+ * @copyright  Copyright (c) 2012 by  Bootic.
+ */
+?>
+
+<script type="text/javascript">
+//<![CDATA[
+    function goToCreateAccountPage() {
+        window.location = '<?php echo $this->getRedirectUrl(); ?>';
+    }
+//]]>
+</script>
+
+<button onclick="javascript:goToCreateAccountPage(); return false;" class="scalable add" type="button" id="<?php echo $this->getHtmlId() ?>">
+    <span id="validation_result"><?php echo $this->escapeHtml($this->getButtonLabel()) ?></span>
+</button>
