@@ -240,16 +240,9 @@ class Bootic_Bootic_Helper_Category extends Bootic_Bootic_Helper_Abstract
         $result = $this->listOrigCategories();
         $booticCategories = $result->getData();
 
-//        foreach ($booticCategories as $booticCategory) {
-//            $category = Mage::getModel('bootic/category')->load($booticCategory['id']);
-//            $category->setId($booticCategory['id']);
-//            $category->setName($booticCategory['name']);
-//            $category->setParents($booticCategory['parents']);
-//            $category->save();
-//        }
-
         if (!$lastRemoteUpdate) {
-            $lastRemoteUpdate = Mage::getModel('core/date')->gmtDate(null, 'now');
+            $timeZone = new DateTimeZone('GMT');
+            $lastRemoteUpdate = new DateTime('now', $timeZone);
         }
 
         $categoryResource = Mage::getResourceModel('bootic/category');
