@@ -22,7 +22,7 @@
 <config>
     <modules>
         <Bootic_Bootic>
-            <version>1.0.0</version>
+            <version>1.0.2</version>
         </Bootic_Bootic>
     </modules>
     <global>
