@@ -28,6 +28,7 @@ class Bootic_Api_Client
      */
     public function __construct(Zend_Rest_Client $restClient = null)
     {
+        Mage::log("construct");
         if (null !== $restClient) {
             $this->setRestClient($restClient);
         }
@@ -81,6 +82,7 @@ class Bootic_Api_Client
      */
     public function authenticateByEmailAndPassword($email, $password)
     {
+        Mage::log("authenticateByEmailAndPassword");
         return $this->_request('/account/login', array(
             'email' => $email,
             'password' => $password,
@@ -95,6 +97,7 @@ class Bootic_Api_Client
      */
     public function authenticateByApiKey($apiKey)
     {
+        Mage::log("authenticateByApiKey");
         return $this->_request('/account/login', array(
             'api_key' => $apiKey
         ));
@@ -105,6 +108,7 @@ class Bootic_Api_Client
      */
     public function getInfo()
     {
+        Mage::log("getInfo");
         $result = $this->_request('/common/info');
 
         return $result;
@@ -116,6 +120,7 @@ class Bootic_Api_Client
      */
     public function getCommonList($type)
     {
+        Mage::log("getCommonList");
         return $this->_request('/common/list', array('name' => $type));
     }
     /**
@@ -126,6 +131,7 @@ class Bootic_Api_Client
      */
     public function createAccount($email, $password)
     {
+        Mage::log("createAccount");
         $result = $this->_request('account/create', array(
             'email' => $email,
             'password' => $password
@@ -144,6 +150,7 @@ class Bootic_Api_Client
      */
     public function createKey($apiKeyName, $apiKeyDescription)
     {
+        Mage::log("createKey");
         $result = $this->_request('/account/create_key', array(
             'api_key_name' => $apiKeyName,
             'api_key_description' => $apiKeyDescription
@@ -159,6 +166,7 @@ class Bootic_Api_Client
      */
     public function getProfile()
     {
+        Mage::log("getProfile");
         $result = $this->_request('/account/get_profile');
 
         return $result;
@@ -172,6 +180,9 @@ class Bootic_Api_Client
      */
     public function editProfile(array $profile)
     {
+        Mage::log("editProfile");
+        Mage::log("profile = [$profile]");
+        Mage::log($profile);
         $result = $this->_request('/account/edit_profile', $profile);
 
         return $result;
@@ -185,6 +196,7 @@ class Bootic_Api_Client
      */
     public function editProfilePicture(array $data)
     {
+        Mage::log("editProfilePicture");
         $result = $this->_request('/account/edit_profile_image', $data);
 
         return $result;
@@ -198,6 +210,7 @@ class Bootic_Api_Client
      */
     public function getOrderList(array $params = array())
     {
+        Mage::log("getOrderList");
         $result = $this->_request('/transaction/list_orders', $params);
         if ($result->getData('record_count') > 0) {
             //load additional data
@@ -223,6 +236,7 @@ class Bootic_Api_Client
      */
     public function updateTransactionStatus($id, array $data)
     {
+        Mage::log("updateTransactionStatus");
         $data['id'] = $id;
         $result = $this->_request('/transaction/update_status', $data);
         return $result;
@@ -234,6 +248,7 @@ class Bootic_Api_Client
      */
     public function getSalesList(array $params = array())
     {
+        Mage::log("getSalesList");
         $result = $this->_request('/transaction/list_sales', $params);
         return $result;
     }
@@ -245,6 +260,7 @@ class Bootic_Api_Client
      */
     public function getStoreFrontList()
     {
+        Mage::log("getStoreFrontList");
         $result = $this->_request('/storefront/list');
 
         return $result;
@@ -258,6 +274,7 @@ class Bootic_Api_Client
      */
     public function createStorefront(array $data)
     {
+        Mage::log("createStorefront");
         $result = $this->_request('/storefront/create', $data);
 
         return $result;
@@ -271,6 +288,7 @@ class Bootic_Api_Client
      */
     public function updateStorefront(array $data)
     {
+        Mage::log("updateStorefront");
         $result = $this->_request('/storefront/update', $data);
 
         return $result;
@@ -284,6 +302,7 @@ class Bootic_Api_Client
      */
     public function getAvailableOptionsForStorefront($shop_id)
     {
+        Mage::log("getAvailableOptionsForStorefront");
         $result = $this->_request('/storefront/get_available_options', array(
             'shop_id' => $shop_id
         ));
@@ -299,6 +318,7 @@ class Bootic_Api_Client
      */
     public function addStorefrontBanner(array $data)
     {
+        Mage::log("addStorefrontBanner");
         $result = $this->_request('/storefront/add_banner', $data);
 
         return $result;
@@ -312,6 +332,7 @@ class Bootic_Api_Client
      */
     public function addProduct(array $data)
     {
+        Mage::log("addProduct");
         $result = $this->_request('product/add_product', $data);
 
         return $result;
@@ -325,6 +346,7 @@ class Bootic_Api_Client
      */
     public function editProduct(array $data)
     {
+        Mage::log("editProduct");
         $result = $this->_request('product/edit_product', $data);
 
         return $result;
@@ -338,6 +360,7 @@ class Bootic_Api_Client
      */
     public function updateProductStock(array $data)
     {
+        Mage::log("updateProductStock");
         $result = $this->_request('product/update_product_stock', $data);
 
         return $result;
@@ -351,6 +374,7 @@ class Bootic_Api_Client
      */
     public function getProductStock(array $data)
     {
+        Mage::log("getProductStock");
         $result = $this->_request('product/get_product_stock', $data);
 
         return $result;
@@ -364,6 +388,7 @@ class Bootic_Api_Client
      */
     public function getProductInfo(array $data)
     {
+        Mage::log("getProductInfo");
         $result = $this->_request('/product/get_product_info', $data);
 
         return $result;
@@ -377,6 +402,7 @@ class Bootic_Api_Client
      */
     public function createProductAttribute(array $data)
     {
+        Mage::log("createProductAttribute");
         $result = $this->_request('product/create_attribute', $data);
 
         return $result;
@@ -389,6 +415,7 @@ class Bootic_Api_Client
      */
     public function listProductAvailableAttributes()
     {
+        Mage::log("listProductAvailableAttributes");
         $result = $this->_request('product/list_available_attributes');
 
         return $result;
@@ -401,6 +428,7 @@ class Bootic_Api_Client
      */
     public function listCategories()
     {
+        Mage::log("listCategories");
         $result = $this->_request('category/list');
 
         return $result;
@@ -413,6 +441,7 @@ class Bootic_Api_Client
      */
     public function getAccountMessages()
     {
+        Mage::log("getAccountMessages");
         $result = $this->_request('account/message');
 
         return $result;
@@ -426,6 +455,7 @@ class Bootic_Api_Client
      */
     public function markMessageAsRead(array $data)
     {
+        Mage::log("markMessageAsRead");
         $result = $this->_request('message/mark_as_read', $data);
 
         return $result;
@@ -434,7 +464,16 @@ class Bootic_Api_Client
 
     public function getOrderDetails($orderId)
     {
+        Mage::log("getOrderDetails");
         $result = $this->_request('/transaction/get_order_details', array('id' => $orderId));
+
+        return $result;
+    }
+
+    public function getCategoriesLastModified()
+    {
+        Mage::log("getCategoriesLastModified");
+        $result = $this->_request('/category/modified');
 
         return $result;
     }
@@ -481,6 +520,7 @@ class Bootic_Api_Client
      */
     public function setRestClient($restClient)
     {
+        Mage::log("setRestClient");
         $this->_restClient = $restClient;
         $this->_restClient->setUri(Zend_Uri_Http::fromString($this->_defaultUri));
 
@@ -492,6 +532,7 @@ class Bootic_Api_Client
      */
     public function getRestClient()
     {
+        Mage::log("getRestClient");
         if (null == $this->_restClient) {
             $restClient = new Zend_Rest_Client();
             $this->setRestClient($restClient);
@@ -506,6 +547,7 @@ class Bootic_Api_Client
      */
     public function setCookieJar($cookieJar)
     {
+        Mage::log("setCookieJar");
         $this->_cookieJar = $cookieJar;
 
         return $this;
@@ -516,6 +558,7 @@ class Bootic_Api_Client
      */
     public function getCookieJar()
     {
+        Mage::log("getCookieJar");
         return $this->_cookieJar;
     }
 
@@ -525,6 +568,7 @@ class Bootic_Api_Client
      */
     public function addUri($key, $value)
     {
+        Mage::log("addUri");
         $this->_uris[$key] = $value;
     }
 
@@ -534,6 +578,7 @@ class Bootic_Api_Client
      */
     public function hasUri($key)
     {
+        Mage::log("hasUri");
         return array_key_exists($key, $this->_uris);
     }
 
@@ -546,6 +591,7 @@ class Bootic_Api_Client
      */
     public function getUri($key, $asString = false)
     {
+        Mage::log("getUri");
         if ($this->hasUri($key)) {
             if ($asString) {
                 return (string) $this->_uris[$key];

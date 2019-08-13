@@ -15,6 +15,7 @@ class Bootic_Bootic_Block_Adminhtml_System_Config_Testapiconnection extends Mage
         parent::_prepareLayout();
 
         $displayCreateAccount = true;
+	Mage::Log('bootic/account/email'.Mage::getStoreConfig('bootic/account/email'));
         if (Mage::getStoreConfig('bootic/account/password') && Mage::getStoreConfig('bootic/account/email')) {
             $displayCreateAccount = false;
         }

@@ -25,7 +25,12 @@ class Bootic_Bootic_Adminhtml_ConnectController extends Bootic_Bootic_Adminhtml_
 
     public function indexAction()
     {
-        $this->_title($this->__('Bootic Connect'));
+        $email = Mage::getStoreConfig('bootic/account/email');
+        if ($email) {
+        	$this->_title($this->__('Bootic Connect (email: '.$email.')'));
+	} else {
+        	$this->_title($this->__('Bootic Connect'));
+	}
         $this
             ->loadLayout()
             ->_setActiveMenu('bootic/bootic')

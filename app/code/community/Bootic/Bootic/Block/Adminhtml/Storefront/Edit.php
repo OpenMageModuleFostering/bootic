@@ -20,8 +20,12 @@ class Bootic_Bootic_Block_Adminhtml_Storefront_Edit extends Mage_Adminhtml_Block
 
     public function getHeaderText()
     {
-        $headerText = Mage::helper('bootic')->__('Edit Storefront');
-
+    	$email = Mage::getStoreConfig('bootic/account/email');
+    	if ($email) {
+    		$headerText = Mage::helper('bootic')->__('Edit Storefront (email: '.$email.')');
+       	} else {
+        	$headerText = Mage::helper('bootic')->__('Edit Storefront');
+    	}
         return $headerText;
     }
 
@@ -32,8 +36,8 @@ class Bootic_Bootic_Block_Adminhtml_Storefront_Edit extends Mage_Adminhtml_Block
      */
     protected function _prepareLayout()
     {
-        $color = Mage::getSingleton('bootic/storefront')->getColor_theme() ? Mage::getSingleton('bootic/storefront')->getColor_theme() : null;
-
+        //$color = Mage::getSingleton('bootic/storefront')->getColor_theme() ? Mage::getSingleton('bootic/storefront')->getColor_theme() : null;
+	/*
         $this->_formScripts[] = "
             var cp = new colorPicker('storefront_color_theme', {
             	color:'#" . $color . "',
@@ -44,7 +48,7 @@ class Bootic_Bootic_Block_Adminhtml_Storefront_Edit extends Mage_Adminhtml_Block
                 }
             });
         ";
-
+	*/
         return parent::_prepareLayout();
     }
 }

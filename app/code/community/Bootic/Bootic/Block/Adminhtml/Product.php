@@ -8,7 +8,8 @@ class Bootic_Bootic_Block_Adminhtml_Product extends Mage_Adminhtml_Block_Widget_
     public function __construct()
     {
         parent::__construct();
-
+        Mage::log("Product->__construct()");
+        
         $this->setId('ProductGrid');
         $this->_parentTemplate = $this->getTemplate();
         $this->setEmptyText('No Products');
@@ -19,7 +20,8 @@ class Bootic_Bootic_Block_Adminhtml_Product extends Mage_Adminhtml_Block_Widget_
 
     protected function _prepareCollection()
     {
-        $collection = mage::getResourceModel('catalog/product_collection')
+    	Mage::log("Product->_prepareCollection()");
+    	$collection = mage::getResourceModel('catalog/product_collection')
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('type_id', array('nin' => array('bundle', 'virtual', 'grouped', 'downloadable')))
             ->addAttributeToFilter('status', 1)
@@ -55,6 +57,7 @@ class Bootic_Bootic_Block_Adminhtml_Product extends Mage_Adminhtml_Block_Widget_
 
     protected function _prepareColumns()
     {
+    	Mage::log("Product->_prepareColumns()");
         $this->addColumn('id', array(
                 'header'=> Mage::helper('bootic')->__('ID'),
                 'width' => '50px',
@@ -148,7 +151,8 @@ class Bootic_Bootic_Block_Adminhtml_Product extends Mage_Adminhtml_Block_Widget_
 
     protected function _prepareMassaction(){
 
-        $this->setMassactionIdField('id');
+        Mage::log("Product->_prepareMassaction()");
+    	$this->setMassactionIdField('id');
         $this->getMassactionBlock()->setFormFieldName('ids');
 
         $this->getMassactionBlock()->addItem('add_selection', array(

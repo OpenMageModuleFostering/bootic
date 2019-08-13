@@ -57,10 +57,10 @@ class Bootic_Bootic_Block_Adminhtml_Storefront_Create_Form extends Mage_Adminhtm
             'values' => Mage::helper('bootic/storefront')->getAvailableTemplatesValues()
         ));
 
-        $fieldset->addField('color_theme', 'hidden', array(
-            'name' => 'color_theme',
-            'value' => '0CA3DB'
-        ));
+        //$fieldset->addField('color_theme', 'hidden', array(
+        //    'name' => 'color_theme',
+        //    'value' => '000000'
+        //));
 
         $form->setUseContainer(true);
         $this->setForm($form);

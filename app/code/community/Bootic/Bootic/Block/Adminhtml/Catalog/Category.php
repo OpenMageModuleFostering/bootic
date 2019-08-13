@@ -28,7 +28,12 @@ class Bootic_Bootic_Block_Adminhtml_Catalog_Category extends Mage_Adminhtml_Bloc
 
     public function getHeaderText()
     {
-        return Mage::helper('bootic')->__('Match Magento categories with Bootic categories');
+        $email = Mage::getStoreConfig('bootic/account/email');
+        if ($email) {
+        	return Mage::helper('bootic')->__('Match Magento categories with Bootic categories (email: '.$email.')');
+	} else {
+        	return Mage::helper('bootic')->__('Match Magento categories with Bootic categories');
+	}
     }
 
     /**

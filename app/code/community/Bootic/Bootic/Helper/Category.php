@@ -25,18 +25,9 @@ class Bootic_Bootic_Helper_Category extends Bootic_Bootic_Helper_Abstract
      */
     public function getBooticCategories()
     {
-        if (isset($this->_booticCategories)) {
-            return $this->_booticCategories;
+        if (!isset($this->_booticCategories)) {
+            $this->_booticCategories = Mage::getResourceModel('bootic/category')->getAllCategories();
         }
-
-        $booticCategoryCollection = Mage::getResourceModel('bootic/category_collection')->load();
-
-        $booticCategories = array();
-        foreach ($booticCategoryCollection as $booticCategory) {
-            $booticCategories[$booticCategory->getId()] = Mage::getModel('bootic/category')->load($booticCategory->getId());
-        }
-
-        $this->_booticCategories = $booticCategories;
 
         return $this->_booticCategories;
     }
@@ -161,18 +152,16 @@ class Bootic_Bootic_Helper_Category extends Bootic_Bootic_Helper_Abstract
     }
 
     /**
-     * Gets the selected root category from config
-     *
      * @return Mage_Core_Model_Abstract
      */
     public function getRootCategory()
     {
         $rootCategoryId = Mage::getStoreConfig('bootic/product/root_category');
-        if ($rootCategoryId) {
-            return Mage::getModel('catalog/category')->load($rootCategoryId);
-        } else {
+        if (!$rootCategoryId) {
             Mage::throwException('Root category is not set in system/configuration/bootic');
         }
+
+        return Mage::getModel('catalog/category')->load($rootCategoryId);
     }
 
     /**
@@ -246,18 +235,25 @@ class Bootic_Bootic_Helper_Category extends Bootic_Bootic_Helper_Abstract
     /**
      * Gets categories from Bootic and stores them locally
      */
-    public function pullBooticCategories()
+    public function pullBooticCategories($lastRemoteUpdate = null)
     {
         $result = $this->listOrigCategories();
         $booticCategories = $result->getData();
 
-        foreach ($booticCategories as $booticCategory) {
-            $category = Mage::getModel('bootic/category')->load($booticCategory['id']);
-            $category->setId($booticCategory['id']);
-            $category->setName($booticCategory['name']);
-            $category->setParents($booticCategory['parents']);
-            $category->save();
+//        foreach ($booticCategories as $booticCategory) {
+//            $category = Mage::getModel('bootic/category')->load($booticCategory['id']);
+//            $category->setId($booticCategory['id']);
+//            $category->setName($booticCategory['name']);
+//            $category->setParents($booticCategory['parents']);
+//            $category->save();
+//        }
+
+        if (!$lastRemoteUpdate) {
+            $lastRemoteUpdate = Mage::getModel('core/date')->gmtDate(null, 'now');
         }
+
+        $categoryResource = Mage::getResourceModel('bootic/category');
+        $categoryResource->insertCategories($booticCategories, $lastRemoteUpdate);
     }
 
 
@@ -278,5 +274,24 @@ class Bootic_Bootic_Helper_Category extends Bootic_Bootic_Helper_Abstract
             ->addAttributeToSort('level', 'DESC');
 
         return $collection;
+    }
+
+    public function syncCategories()
+    {
+        $timeZone = new DateTimeZone('GMT');
+
+        $result = $this->getBootic()->getCategoriesLastModified();
+        $lastRemoteUpdate = new DateTime($result->getData('last_modification_date'), $timeZone);
+
+        if ($t = Mage::getResourceModel('bootic/category')->getLocalLastUpdate()) {
+            $lastLocalUpdate = new DateTime($t, $timeZone);
+        } else {
+            $this->pullBooticCategories($lastRemoteUpdate);
+            return;
+        }
+
+        if ($lastLocalUpdate < $lastRemoteUpdate) {
+            $this->pullBooticCategories($lastRemoteUpdate);
+        }
     }
 }

@@ -11,15 +11,15 @@
 <script type="text/javascript">
     document.observe("dom:loaded", function() {
         var storeOptions = <?php echo json_encode($opts) ?>;
-        console.log(storeOptions);
 
         var templates = storeOptions.templates;
-        var color = "#" + $('storefront_color_theme').value;
+//        var color = "#" + $('storefront_color_theme').value;
         var bannerSrc = $$('.banners-container .selected img')[0].src;
 
         var template = new Element('img');
         template.setStyle({ position: 'absolute' });
 
+/*
         var banner = new Element('img');
         banner.src = bannerSrc;
         banner.setStyle({ position: 'absolute', width: '500px', top: '55px'});
@@ -44,7 +44,6 @@
                 });
             }
         });
-
         // Now we track change event on template
         // for color see Bootic_Bootic_Block_Adminhtml_Storefront_Edit
         // for banner see banners.phtml
@@ -57,6 +56,7 @@
                 }
             });
         });
+*/
 
     });
 </script>

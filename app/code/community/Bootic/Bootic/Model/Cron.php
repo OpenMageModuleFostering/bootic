@@ -40,4 +40,10 @@ class Bootic_Bootic_Model_Cron extends Mage_Core_Model_Abstract
         Mage::log('syncing orders');
         Mage::helper('bootic/orders')->syncOrders();
     }
+
+    public function syncCategories()
+    {
+        Mage::log('syncing categories');
+        Mage::helper('bootic/category')->syncCategories();
+    }
 }

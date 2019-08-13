@@ -24,7 +24,12 @@ class Bootic_Bootic_Adminhtml_StorefrontController extends Bootic_Bootic_Adminht
 {
     protected function _init()
     {
-        $this->_title($this->__('Bootic Storefront'));
+        $email = Mage::getStoreConfig('bootic/account/email');
+        if ($email) {
+        	$this->_title($this->__('Bootic Storefront (email: '.$email.')'));
+	} else {
+        	$this->_title($this->__('Bootic Storefront'));
+	}
 
         $this
             ->loadLayout()

@@ -9,20 +9,22 @@ class Bootic_Bootic_Model_Shipping_Flatrate extends Mage_Shipping_Model_Carrier_
     
     public function collectRates(Mage_Shipping_Model_Rate_Request $request)
     {
-    
-        $result = Mage::getModel('shipping/rate_result');
-    
-        $method = Mage::getModel('shipping/rate_result_method');
-        $method->setCarrier($this->_code);
-        $method->setCarrierTitle($this->getConfigData('title'));
-        $method->setMethod('flat_shipping');
-        $method->setMethodTitle($this->getConfigData('name'));
-        $method->setPrice(0);
-        $method->setCost(0);
-    
-        $result->append($method);
-    
-        return $result;
+        if (Mage::registry('bootic_order_creation') ) {
+
+            $result = Mage::getModel('shipping/rate_result');
+
+            $method = Mage::getModel('shipping/rate_result_method');
+            $method->setCarrier($this->_code);
+            $method->setCarrierTitle($this->getConfigData('title'));
+            $method->setMethod('flat_shipping');
+            $method->setMethodTitle($this->getConfigData('name'));
+            $method->setPrice(0);
+            $method->setCost(0);
+
+            $result->append($method);
+
+            return $result;
+        }
     }
     
     public function getAllowedMethods()

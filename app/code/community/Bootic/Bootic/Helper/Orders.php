@@ -146,6 +146,10 @@ class Bootic_Bootic_Helper_Orders extends Bootic_Bootic_Helper_Abstract
      */
     public function createOrder($order)
     {
+        // We set a flag so that from our custom shipping method we know that it's a bootic order
+        // otherwise that shipping method is showed to front end users
+        Mage::register('bootic_order_creation', true);
+
         //create customer
         $customer = $this->createOrGetCustomer($order);
 

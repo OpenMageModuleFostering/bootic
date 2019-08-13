@@ -10,6 +10,7 @@ class Bootic_Bootic_Block_Adminhtml_System_Config_Button_Cron extends Mage_Admin
      */
     protected function _prepareLayout()
     {
+        Mage::log('_prepareLayout');
         parent::_prepareLayout();
         if (!$this->getTemplate()) {
             $this->setTemplate('bootic/adminhtml/system/config/button/cron.phtml');
@@ -26,6 +27,7 @@ class Bootic_Bootic_Block_Adminhtml_System_Config_Button_Cron extends Mage_Admin
      */
     public function render(Varien_Data_Form_Element_Abstract $element)
     {
+        Mage::log('render');
         $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
         return parent::render($element);
     }
@@ -38,6 +40,7 @@ class Bootic_Bootic_Block_Adminhtml_System_Config_Button_Cron extends Mage_Admin
      */
     protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element)
     {
+        Mage::log('_getElementHtml');
         $originalData = $element->getOriginalData();
         $this->addData(array(
             'button_label' => Mage::helper('bootic')->__($originalData['button_label']),

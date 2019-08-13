@@ -84,7 +84,10 @@ class Bootic_Api_Result
         }
         $this->setHasWarning($hasWarning);
 
-        $this->setData(null, $data['data']);
+        Mage::log($data);
+	if (isset($data['data'])) {
+        	$this->setData(null, $data['data']);
+	}
     }
 
     /**

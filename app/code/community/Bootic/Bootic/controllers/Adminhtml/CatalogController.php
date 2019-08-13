@@ -38,7 +38,12 @@ class Bootic_Bootic_Adminhtml_CatalogController extends Bootic_Bootic_Adminhtml_
             }
         }
 
-        $this->_title($this->__('Bootic Catalog'));
+        $email = Mage::getStoreConfig('bootic/account/email');
+        if ($email) {
+        	$this->_title($this->__('Bootic Catalog (email: '.$email.')'));
+	} else {
+        	$this->_title($this->__('Bootic Catalog'));
+	}
 
         $this
             ->loadLayout()

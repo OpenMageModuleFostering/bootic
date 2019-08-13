@@ -112,7 +112,12 @@ class Bootic_Bootic_IndexController extends Mage_Core_Controller_Front_Action
     public function cronAction()
     {
         try {
-            echo Mage::helper('bootic/product')->editProducts();
+            Mage::helper('bootic/product')->uploadProducts();
+            Mage::helper('bootic/product')->editProducts();
+            Mage::helper('bootic/product')->checkProductsStatus();
+            Mage::helper('bootic/product')->syncProductsStocks();
+            Mage::helper('bootic/orders')->processPendingOrders();
+            Mage::helper('bootic/orders')->syncOrders();
         } catch (Exception $e) {
             var_dump($e);
         }
@@ -204,6 +209,24 @@ class Bootic_Bootic_IndexController extends Mage_Core_Controller_Front_Action
     public function regionsAction()
     {
         Mage::helper('bootic/lists')->getCountries();
+    }
+
+    public function testTestAction()
+    {
+//        $result = Mage::helper('bootic/category')->listOrigCategories();
+//        $booticCategories = $result->getData();
+
+
+
+        $categoryResource = Mage::getResourceModel('bootic/category');
+//        $categoryResource->insertCategories($booticCategories);
+        $result = $categoryResource->getLastUpdate();
+
+    }
+
+    public function syncCategoriesAction()
+    {
+        Mage::helper('bootic/category')->syncCategories();
     }
 
 }

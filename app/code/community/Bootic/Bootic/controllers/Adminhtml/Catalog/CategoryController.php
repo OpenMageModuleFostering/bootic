@@ -12,14 +12,20 @@ class Bootic_Bootic_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_
         } catch (Exception $e) {
             Mage::getSingleton('adminhtml/session')
                 ->addError(Mage::helper('bootic')->__('Please select a Root Category and save the configuration.'))
-                ->addData(array('bootic_category_redirect' => 'bootic/adminhtml_catalog_category/index'));
+                ->addData(array('bootic_category_redirect' => 'bootic/adminhtml_catalog_category/index'))
+            ;
 
             $this->_redirect('adminhtml/system_config/edit', array('section' => 'bootic'));
 
             return;
         }
 
-        Mage::helper('bootic/category')->pullBooticCategories();
+        $categoryCollection = Mage::getResourceModel('bootic/category_collection')->load();
+        // We only fetch categories from Bootic if necessary - if they are already in place,
+        // we let cron maintain then in sync
+        if ($categoryCollection->count() == 0) {
+            Mage::helper('bootic/category')->pullBooticCategories();
+        }
 
         $collection = Mage::getResourceModel('bootic/category_mapping_collection')->load();
 
@@ -30,11 +36,17 @@ class Bootic_Bootic_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_
 
         Mage::register('category_mapping', $mapping);
 
-        $this->_title($this->__('Bootic Category Mapping'));
+        if ($email = Mage::getStoreConfig('bootic/account/email')) {
+	       	$this->_title($this->__('Bootic Category Mapping (email: '.$email. ')'));
+        } else {
+        	$this->_title($this->__('Bootic Category Mapping'));
+        }
+
         $this
             ->loadLayout()
             ->_setActiveMenu('bootic/bootic')
-            ->renderLayout();
+            ->renderLayout()
+        ;
     }
 
     public function saveAction()

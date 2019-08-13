@@ -4,6 +4,7 @@ class Bootic_Bootic_Adminhtml_System_CronController extends Mage_Adminhtml_Contr
 {
     public function runProcessOrdersAction()
     {
+        Mage::log('runProcessOrdersAction');
         try {
             $orders = $this->getCronObserver()->processOrders();
             $response = array(
@@ -26,6 +27,7 @@ class Bootic_Bootic_Adminhtml_System_CronController extends Mage_Adminhtml_Contr
      */
     public function getCronObserver()
     {
+        Mage::log('getCronObserver');
         return Mage::getModel('bootic/OrdersCronObserver');
     }
 }

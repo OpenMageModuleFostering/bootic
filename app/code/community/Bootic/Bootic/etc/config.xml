@@ -244,6 +244,14 @@
                     <model>bootic/cron::syncOrders</model>
                 </run>
             </bootic_bootic_sync_orders>
+            <bootic_bootic_sync_categories>
+                <schedule>
+                    <cron_expr>0 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>bootic/cron::syncCategories</model>
+                </run>
+            </bootic_bootic_sync_categories>
         </jobs>
     </crontab>
     <default>

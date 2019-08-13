@@ -33,7 +33,7 @@ class Bootic_Bootic_Block_Adminhtml_Storefront_Edit_Tab_Design_Preview extends V
             '<script type="text/javascript">
                 var storeOptions = ' . json_encode($this->getOptions()) . ';
                 var templates = storeOptions.templates;
-                var color = "#" + $("storefront_color_theme").value;
+                /*var color = "#" + $("storefront_color_theme").value;
                 var previewImg = new Element("img");
 
                 templates.each(function (template) {
@@ -46,7 +46,7 @@ class Bootic_Bootic_Block_Adminhtml_Storefront_Edit_Tab_Design_Preview extends V
                 })
 
                 $("storefront_preview_fieldset").setStyle({ backgroundColor: color });
-
+		*/
             </script>'
         ;
 

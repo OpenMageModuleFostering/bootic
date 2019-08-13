@@ -21,13 +21,14 @@ class Bootic_Bootic_Block_Adminhtml_Storefront_Edit_Tab_Design
             'values' => Mage::helper('bootic/storefront')->getAvailableTemplatesValues()
         ));
 
+/*
         $fieldset->addField('color_theme', 'text', array(
             'name' => 'color_theme',
             'label' => Mage::helper('bootic')->__('Color:'),
             'style'   => "width:100px;float:left;margin-right:10px;",
             'after_element_html' => '<div id="color-preview" style="display:block;width:15px;height:15px;float:left;padding:1px;border:1px solid #AAA;"></div>'
         ));
-
+*/
         $bannerFieldset = $form->addFieldset('banner_fieldset', array('legend' => Mage::helper('bootic')->__('Storefront Banner')));
 
         $bannerFieldset->addField('banner', 'hidden', array(
@@ -43,9 +44,9 @@ class Bootic_Bootic_Block_Adminhtml_Storefront_Edit_Tab_Design
             'note'      => Mage::helper('bootic')->__('Image has to be either png, gif or jpg and be exactly 996*180px'),
         ));
 
-        $form->addFieldset('preview_fieldset', array(
-            'legend' => Mage::helper('bootic')->__('Storefront Preview'),
-        ));
+//        $form->addFieldset('preview_fieldset', array(
+//            'legend' => Mage::helper('bootic')->__('Storefront Preview'),
+//        ));
 
 //        $previewFieldset->addType('preview','Bootic_Bootic_Block_Adminhtml_Storefront_Edit_Tab_Design_Preview');
 //

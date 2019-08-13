@@ -19,6 +19,11 @@ class Bootic_Bootic_Block_Adminhtml_Connect_Profile extends Mage_Adminhtml_Block
 
     public function getHeaderText()
     {
-        return Mage::helper('bootic')->__('Edit your profile');
+    	$email = Mage::getStoreConfig('bootic/account/email');
+    	if ($email) {
+        	return Mage::helper('bootic')->__('Edit your profile (email: '.$email.')');
+    	} else {
+    		return Mage::helper('bootic')->__('Edit your profile');
+    	}
     }
 }

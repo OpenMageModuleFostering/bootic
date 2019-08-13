@@ -26,6 +26,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
      */
     public function massCreateProducts(Mage_Core_Controller_Request_Http $request)
     {
+        Mage::log('massCreateProducts');
         $ids = $request->__get('ids');
 
         $addedToQueue                   = array();
@@ -136,6 +137,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
      */
     public function loadByBooticId($id)
     {
+        Mage::log('loadByBooticId');
         /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
         $collection = Mage::getResourceModel('catalog/product_collection')
             ->addAttributeToSelect('*')
@@ -167,6 +169,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
      */
     public function uploadProducts()
     {
+        Mage::log('uploadProducts');
         $collection = Mage::getResourceModel('catalog/product_collection')
             ->addAttributeToSelect('*')
             ->addAttributeToSort('entity_id', 'ASC')
@@ -225,6 +228,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
 
                 } catch (Bootic_Bootic_Exception $e) {
                     // If an error occured on one of the calls, we flag product as errored and log the errors
+                    Mage::logException($e);
                     $statusError = Mage::getModel('bootic/product_data')->getStatusError();
                     Mage::helper('bootic/product_data')->updateProductStatus($product, $statusError);
 
@@ -234,7 +238,8 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
                 } catch (Bootic_Api_Exception $e) {
                     // Probably a network error or an API downtime
                     // We try 5 times and then we notify Admin
-                    $statusProcessing = Mage::getModel('bootic/product_data')->getStatusProcessing();
+                    Mage::logException($e);
+                	$statusProcessing = Mage::getModel('bootic/product_data')->getStatusProcessing();
                     $productData = Mage::getModel('bootic/product_data')->load($product->getId());
                     $productData->setBooticStatus($statusProcessing);
                     $productData->incrementUploadFailures();
@@ -252,7 +257,8 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
 
                 } catch (Exception $e) {
                     // If anything else weird happens, we re-queue the product
-                    $statusProcessing = Mage::getModel('bootic/product_data')->getStatusProcessing();
+                    Mage::logException($e);
+                	$statusProcessing = Mage::getModel('bootic/product_data')->getStatusProcessing();
                     Mage::helper('bootic/product_data')->updateProductStatus($product, $statusProcessing);
 
                     $count ++;
@@ -267,6 +273,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
      */
     public function editProducts()
     {
+        Mage::log('editProducts');
         $collection = Mage::getResourceModel('catalog/product_collection')
             ->addAttributeToSelect('*')
             ->addAttributeToSort('entity_id', 'ASC')
@@ -312,7 +319,8 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
                 $count ++;
 
             } catch (Bootic_Bootic_Exception $e) {
-                // If update fails or get warning, we show admin the product has errors
+                Mage::logException($e);
+            	// If update fails or get warning, we show admin the product has errors
                 $statusException = ($e->isWarning()) ? Mage::getModel('bootic/product_data')->getStatusIncomplete() : Mage::getModel('bootic/product_data')->getStatusError();
                 $status = ($e->isWarning()) ? 'warning' : 'error';
                 Mage::helper('bootic/product_data')->updateProductStatus($product, $statusException);
@@ -328,6 +336,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
                 }
 
             } catch (Exception $e) {
+            	Mage::logException($e);
                 // If anything else weird happens, we simply disregard
                 Mage::log('Failed editing a product on Bootic');
             }
@@ -343,6 +352,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
      */
     protected function _isProductUploadable(Mage_Catalog_Model_Product $product)
     {
+        Mage::log('_isProductUploadable');
         $parents = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
 
         $result = true;
@@ -364,6 +374,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
      */
     public function makeSimpleProduct(Mage_Catalog_Model_Product $product)
     {
+        Mage::log('makeSimpleProduct');
         $attributes = $product->getAttributes();
         $personalizations = array();
         foreach ($attributes as $attribute) {
@@ -400,6 +411,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
                 $productData->save();
 
             } catch (Bootic_Api_Exception $e) {
+            	Mage::logException($e);
                 // If an error occurs during this call, product stock gets set to out of sync
                 $productData->setIsStockSynced(false);
                 $productData->save();
@@ -408,11 +420,12 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
             // If product upload call originally had warnings, we notify the admin
             if ($result->hasWarning()) {
                 $warningMessages = $result->getWarningMessages();
-
+                Mage::log($warningMessages);
+                
                 // We remove the first message which is not intended for Magento Admins
                 array_shift($warningMessages);
                 $message = implode(' ', $warningMessages);
-
+                Mage::log($message);
                 throw new Bootic_Bootic_Exception($message);
             }
         }
@@ -426,6 +439,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
      */
     public function editSimpleProduct(Mage_Catalog_Model_Product $product)
     {
+        Mage::log('editSimpleProduct');
         $attributes = $product->getAttributes();
         $personalizations = array();
         foreach ($attributes as $attribute) {
@@ -471,6 +485,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
      */
     public function makeConfigurableProduct(Mage_Catalog_Model_Product $product)
     {
+        Mage::log('makeConfigurableProduct');
         $productAttributes = $this->_getConfigurableProductAttributes($product, $productOptions, $matchedAttributes);
 
         $attributes = $product->getAttributes();
@@ -542,6 +557,8 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
                         $_productData->save();
 
                     } catch (Bootic_Api_Exception $e) {
+                    	Mage::logException($e);
+                    	 
                         // If an error occurs during this call, product stock gets set to out of sync
                         $_productData->setIsStockSynced(false);
                         $_productData->save();
@@ -552,6 +569,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
                     try {
                         $this->updateProductStock($productId, $stockId, $sku, $stock, $valid);
                     } catch (Exception $e) {
+                    	Mage::logException($e);
                         $stockInSync = false;
                     }
                 }
@@ -563,11 +581,12 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
             // If product upload call originally had warnings, we notify the admin
             if ($result->hasWarning()) {
                 $warningMessages = $result->getWarningMessages();
-
+                Mage::log($warningMessages);
                 // We remove the first message which is not intended for Magento Admins
                 array_shift($warningMessages);
                 $message = implode(' ', $warningMessages);
-
+                Mage::log(message);
+                
                 throw new Bootic_Bootic_Exception($message);
             }
         }
@@ -581,6 +600,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
      */
     public function editConfigurableProduct(Mage_Catalog_Model_Product $product)
     {
+        Mage::log('editConfigurableProduct');
         $productAttributes = $this->_getConfigurableProductAttributes($product, $productOptions, $matchedAttributes);
 
         $attributes = $product->getAttributes();
@@ -609,17 +629,21 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
             throw new Bootic_Bootic_Exception($result->getErrorMessage());
         } elseif ($result->hasWarning()) {
             $warningMessages = $result->getWarningMessages();
-
+                            
+            Mage::log($warningMessages);
+            
             // We remove the first message which is not intended for Magento Admins
             array_shift($warningMessages);
             $message = implode(' ', $warningMessages);
-
+            Mage::log($message);
+            
             throw new Bootic_Bootic_Exception($message, 0, null, true);
         }
     }
 
     protected function _getConfigurableProductAttributes(Mage_Catalog_Model_Product $product, &$productOptions, &$matchedAttributes)
     {
+        Mage::log('_getConfigurableProductAttributes');
         $productOptions = Mage::helper('bootic/product_type_configurable')->getOptions($product);
 
         $matchedAttributes = array();
@@ -665,6 +689,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
      */
     public function updateProductStock($productId = null, $stockId = null, $sku = null, $stock = null, $valid = false)
     {
+        Mage::log('updateProductStock');
         $p['product_id']    = (int)$productId;
         $p['stock_id']      = $stockId;
         $p['sku']           = $sku;
@@ -687,6 +712,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
      */
     public function listProductAvailableAttributes()
     {
+        Mage::log('listProductAvailableAttributes');
         $result = $this->getBootic()->listProductAvailableAttributes();
 
         return $result->getData();
@@ -701,6 +727,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
      */
     public function createProductAttribute($attributeCode)
     {
+        Mage::log('createProductAttribute');
         if (is_null($attributeCode)) {
             throw new Bootic_Bootic_Exception('Attribute code cannot be empty');
         }
@@ -750,6 +777,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
      */
     public function addBooticAttribute(array $attribute)
     {
+        Mage::log('addBooticAttribute');
         $this->_booticAttributes[] = $attribute;
         return $this;
     }
@@ -763,6 +791,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
      */
     private function _prepareBooticProductArray(Mage_Catalog_Model_Product $_product, $product_attributes = null)
     {
+        Mage::log('_prepareBooticProductArray');
         /** @var $product Mage_Catalog_Model_Product */
         $product = Mage::getModel('catalog/product')->load($_product->getId());
 
@@ -892,6 +921,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
      */
     public function checkProductsStatus()
     {
+        Mage::log('checkProductsStatus');
         $collection = Mage::getResourceModel('catalog/product_collection')
             ->addAttributeToSelect('*')
             ->addAttributeToSort('entity_id', 'ASC')
@@ -961,6 +991,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
      */
     public function syncProductsStocks()
     {
+        Mage::log('syncProductsStocks');
         $collection = Mage::getResourceModel('catalog/product_collection')
             ->addAttributeToSelect('*')
             ->addAttributeToSort('entity_id', 'ASC')
@@ -1000,6 +1031,7 @@ class Bootic_Bootic_Helper_Product extends Bootic_Bootic_Helper_Abstract
                 $this->updateProductStock($productId, $stockId, $sku, $stock, $valid);
                 Mage::helper('bootic/product_data')->setStockSync($product, true);
             } catch (Exception $e) {
+            	Mage::logException($e);
                 // Here we just do nothing to let the system retry on its own on a next cron run
             }
         }

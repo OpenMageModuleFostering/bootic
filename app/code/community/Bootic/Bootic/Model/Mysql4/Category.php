@@ -114,7 +114,7 @@ class Bootic_Bootic_Model_Mysql4_Category extends Mage_Core_Model_Mysql4_Abstrac
      * @param int $id
      * @return array
      */
-    public function lookupParentIds($id)
+    protected function lookupParentIds($id)
     {
         $adapter = $this->_getReadAdapter();
 
@@ -135,7 +135,7 @@ class Bootic_Bootic_Model_Mysql4_Category extends Mage_Core_Model_Mysql4_Abstrac
      * @param int $id
      * @return array
      */
-    public function lookupChildrenIds($id)
+    protected function lookupChildrenIds($id)
     {
         $adapter = $this->_getReadAdapter();
 
@@ -148,5 +148,88 @@ class Bootic_Bootic_Model_Mysql4_Category extends Mage_Core_Model_Mysql4_Abstrac
         );
 
         return $adapter->fetchCol($select, $binds);
+    }
+
+    public function insertCategories(array $categories, DateTime $lastRemoteUpdate)
+    {
+        // We clear our 2 tables
+        $this->_getWriteAdapter()->delete($this->getMainTable());
+        $this->_getWriteAdapter()->delete($this->getTable('bootic/category_parent'));
+
+        $insertCategories = array();
+        $insertCategoryParents = array();
+        foreach ($categories as $category) {
+            $insertCategories[] = array(
+                'category_id' => $category['id'],
+                'name' => $category['name'],
+                'update_time' => $lastRemoteUpdate->format('Y-m-d H:i:s')
+            );
+
+            if (count($category['parents']) > 0) {
+                foreach ($category['parents'] as $key => $parent) {
+                    $insertCategoryParents[] = array(
+                        'category_id' => $category['id'],
+                        'parent_id' => $parent
+                    );
+                }
+            }
+        }
+
+        $this->_getWriteAdapter()->insertMultiple($this->getMainTable(), $insertCategories);
+        $this->_getWriteAdapter()->insertMultiple($this->getTable('bootic/category_parent'), $insertCategoryParents);
+    }
+
+    public function getAllCategories()
+    {
+        $read = $this->_getReadAdapter();
+
+        $results = $read->fetchAll("SELECT c.*, p.parent_id FROM bootic_category c LEFT JOIN bootic_category_parent p ON p.category_id = c.category_id");
+
+        $categories = array();
+        foreach ($results as $result) {
+            if (array_key_exists($result['category_id'], $categories)) {
+                $categories[$result['category_id']]['parents'][] = $result['parent_id'];
+            } else {
+                $categories[$result['category_id']] = array(
+                    'category_id'   => $result['category_id'],
+                    'name'          => $result['name'],
+                    'parents'       => ($result['parent_id'] !== null) ? array($result['parent_id']) : array(),
+                    'children'      => array()
+                );
+            }
+        }
+
+        // We populate the children
+        foreach ($categories as $category) {
+            if (count($category['parents']) > 0) {
+                foreach ($category['parents'] as $parent) {
+                    if (array_key_exists($parent, $categories)) {
+                        $categories[$parent]['children'][] = $category['category_id'];
+                    }
+                }
+            }
+        }
+
+        $booticCategories = array();
+        foreach ($categories as $category) {
+            $c = Mage::getModel('bootic/category');
+
+            $c->setCategoryId($category['category_id']);
+            $c->setName($category['name']);
+            $c->setParents($category['parents']);
+            $c->setChildren($category['children']);
+
+            $booticCategories[$category['category_id']] = $c;
+        }
+
+        return $booticCategories;
+    }
+
+    public function getLocalLastUpdate()
+    {
+        return $this
+            ->_getReadAdapter()
+            ->fetchOne("SELECT c.update_time FROM bootic_category c ORDER BY c.update_time DESC")
+        ;
     }
 }
